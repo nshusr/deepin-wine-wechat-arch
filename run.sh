@@ -14,7 +14,7 @@ WECHAT_INSTALLER="WeChatSetup"
 WECHAT_VER="2.9.5.56"
 APPTAR="files.7z"
 PACKAGENAME="com.wechat"
-WINE_CMD="wine"
+WINE_CMD="deepin-wine"
 
 HelpApp()
 {
