@@ -1,6 +1,8 @@
 在Archlinux及衍生发行版上运行微信(WeChat)
 =======
 
+**本分支：采用 `deepin-wine5` 而非原版 `wine`；以下徽章来自母分支，小心混淆**
+
 <p align="center">
   <a href="https://travis-ci.org/countstarlight/deepin-wine-wechat-arch">
     <img src="https://travis-ci.org/countstarlight/deepin-wine-wechat-arch.svg?branch=master" alt="Build Status">
@@ -19,67 +21,40 @@
   </a>
 </p>
 
-Deepin打包的微信(WeChat)容器移植到Archlinux，不依赖`deepin-wine`，包含定制的注册表配置，微信安装包替换为官方最新
+Deepin打包的微信(WeChat)容器移植到Archlinux，**本分支依赖`deepin-wine`**，包含定制的注册表配置，微信安装包替换为官方最新
 
 <!-- TOC -->
 
-- [安装](#安装)
-    - [从AUR安装](#从aur安装)
-    - [用安装包安装](#用安装包安装)
+- [在Archlinux及衍生发行版上运行微信(WeChat)](#在archlinux及衍生发行版上运行微信wechat)
+  - [安装](#安装)
     - [本地打包安装](#本地打包安装)
-- [兼容性记录](#兼容性记录)
-- [切换到 `deepin-wine`](#切换到-deepin-wine)
+  - [兼容性记录](#兼容性记录)
+  - [切换到 `deepin-wine`](#切换到-deepin-wine)
     - [自动切换(推荐)](#自动切换推荐)
     - [手动切换](#手动切换)
-        - [1. 安装 `deepin-wine`](#1-安装-deepin-wine)
-        - [2. 对于非 GNOME 桌面(KDE, XFCE等)](#2-对于非-gnome-桌面kde-xfce等)
-        - [3. 删除已安装的微信目录](#3-删除已安装的微信目录)
-        - [4. 修复 `deepin-wine` 字体渲染发虚](#4-修复-deepin-wine-字体渲染发虚)
-- [常见问题及解决](#常见问题及解决)
+      - [1. 安装 `deepin-wine`](#1-安装-deepin-wine)
+      - [2. 对于非 GNOME 桌面(KDE, XFCE等)](#2-对于非-gnome-桌面kde-xfce等)
+      - [3. 删除已安装的微信目录](#3-删除已安装的微信目录)
+      - [4. 修复 `deepin-wine` 字体渲染发虚](#4-修复-deepin-wine-字体渲染发虚)
+  - [常见问题及解决](#常见问题及解决)
     - [不能截图](#不能截图)
     - [高分辨率屏幕支持](#高分辨率屏幕支持)
     - [使用全局截图快捷键](#使用全局截图快捷键)
     - [消除阴影边框](#消除阴影边框)
-- [感谢](#感谢)
-- [更新日志](#更新日志)
+  - [感谢](#感谢)
+  - [更新日志](#更新日志)
 
 <!-- /TOC -->
 
 ## 安装
 
-`deepin-wine-wechat`依赖`Multilib`仓库中的`wine`，`wine-gecko`和`wine-mono`，Archlinux默认没有开启`Multilib`仓库，需要编辑`/etc/pacman.conf`，取消对应行前面的注释([Archlinux wiki](https://wiki.archlinux.org/index.php/Official_repositories#multilib)):
+`deepin-wine-wechat`依赖AUR中的`deepin-wine5`，可从AUR或 https://github.com/abcfy2/deepin-wine5-aur 获取。目前`archlinuxcn`仓库仅含`deepin-wine`而暂未加入`deepin-wine5`; 若将来`deepin-wine5`收入`archlinuxcn`, 则可编辑`/etc/pacman.conf`从仓库直接下载：
 
-```diff
-# If you want to run 32 bit applications on your x86_64 system,
-# enable the multilib repositories as required here.
+```cong
+# Add to the end of `pacman.conf`
 
-#[multilib-testing]
-#Include = /etc/pacman.d/mirrorlist
-
--#[multilib]
--#Include = /etc/pacman.d/mirrorlist
-+[multilib]
-+Include = /etc/pacman.d/mirrorlist
-```
-
-**注意：由于新版微信可能需要 `wine` 还没有实现的一些win api，这会导致一些功能不可用，安装前先根据[兼容性记录](#兼容性记录)选择一个合适的版本**
-
-### 从AUR安装
-
-已添加到AUR [deepin-wine-wechat](https://aur.archlinux.org/packages/deepin-wine-wechat/)，可使用 `yay` 或 `yaourt` 安装:
-
-```shell
-yay -S deepin-wine-wechat
-```
-
-### 用安装包安装
-
-> 由 [Travis CI](https://travis-ci.org/countstarlight/deepin-wine-wechat-arch) 在 Docker 容器 [mikkeloscar/arch-travis](https://hub.docker.com/r/mikkeloscar/arch-travis) 中自动构建的 ArchLinux 安装包
-
-在 [GitHub Release](https://github.com/countstarlight/deepin-wine-wechat-arch/releases) 页面下载后缀为 `.pkg.tar.xz` 或 `.pkg.tar.zst` 的安装包，使用`pacman`安装：
-
-```bash
-sudo pacman -U #下载的包名
+[archlinuxcn]
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
 ```
 
 `.md5` 文件用于校验包完整性：
@@ -91,10 +66,10 @@ md5sum -c *.md5
 ### 本地打包安装
 
 ```shell
+ # 如想使用本分支，请将链接中的 `.../countstarlight/...` 改为 `.../bryango/...`
  git clone https://github.com/countstarlight/deepin-wine-wechat-arch.git
 
  cd deepin-wine-wechat-arch
-  
  makepkg -si
 ```
 
