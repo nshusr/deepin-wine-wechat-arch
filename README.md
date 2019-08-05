@@ -1,6 +1,8 @@
 在Archlinux及衍生发行版上运行微信(WeChat)
 =======
 
+**本分支：采用 `deepin-wine` 而非原版 `wine`；以下徽章来自母分支，小心混淆**
+
 <p align="center">
   <a href="https://travis-ci.org/countstarlight/deepin-wine-wechat-arch">
     <img src="https://travis-ci.org/countstarlight/deepin-wine-wechat-arch.svg?branch=master" alt="Build Status">
@@ -19,7 +21,7 @@
   </a>
 </p>
 
-Deepin打包的微信(WeChat)容器移植到Archlinux，不依赖`deepin-wine`，包含定制的注册表配置，微信安装包替换为官方最新
+Deepin打包的微信(WeChat)容器移植到Archlinux，**本分支依赖`deepin-wine`**，包含定制的注册表配置，微信安装包替换为官方最新
 
 <!-- TOC -->
 
@@ -35,46 +37,22 @@ Deepin打包的微信(WeChat)容器移植到Archlinux，不依赖`deepin-wine`�
 
 ## 安装
 
-`deepin-wine-wechat`依赖`Multilib`仓库中的`wine`，`wine_gecko`和`wine-mono`，Archlinux默认没有开启`Multilib`仓库，需要编辑`/etc/pacman.conf`，取消对应行前面的注释([Archlinux wiki](https://wiki.archlinux.org/index.php/Official_repositories#multilib)):
+`deepin-wine-wechat`依赖AUR或`archlinuxcn`仓库中的`deepin-wine`，可编辑`/etc/pacman.conf`，加入`archlinuxcn`仓库，例如：
 
-```diff
-# If you want to run 32 bit applications on your x86_64 system,
-# enable the multilib repositories as required here.
+```cong
+# Add to the end of `pacman.conf`
 
-#[multilib-testing]
-#Include = /etc/pacman.d/mirrorlist
-
--#[multilib]
--#Include = /etc/pacman.d/mirrorlist
-+[multilib]
-+Include = /etc/pacman.d/mirrorlist
-```
-
-### 从 AUR 安装
-
-已添加到AUR [deepin-wine-wechat](https://aur.archlinux.org/packages/deepin-wine-wechat/)，可使用 `yay` 或 `yaourt` 安装:
-
-```shell
-yay -S deepin-wine-wechat
-```
-
-### 从 GitHub Release 安装
-
-> 由 [Travis CI](https://travis-ci.org/countstarlight/deepin-wine-wechat-arch) 在 Docker 容器 [mikkeloscar/arch-travis](https://hub.docker.com/r/mikkeloscar/arch-travis) 中自动构建的 ArchLinux 安装包
-
-在[GitHub Release](https://github.com/countstarlight/deepin-wine-wechat-arch/releases)页面下载 `.pkg.tar.xz`后缀的安装包，使用`pacman`安装：
-
-```bash
-sudo pacman -U #下载的包名
+[archlinuxcn]
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
 ```
 
 ### 从源码安装
 
 ```shell
+ # 如想使用本分支，请将链接中的 `.../countstarlight/...` 改为 `.../bryango/...`
  git clone https://github.com/countstarlight/deepin-wine-wechat-arch.git
 
  cd deepin-wine-wechat-arch
-  
  makepkg -si
 ```
 
