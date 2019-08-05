@@ -4,12 +4,12 @@ pkgname=deepin-wine-wechat
 pkgver=2.6.8.65
 wechat_installer=WeChatSetup
 deepinwechatver=2.6.2.31deepin0
-pkgrel=1
+pkgrel=1.1
 pkgdesc="Tencent WeChat (com.wechat) on Deepin Wine For Archlinux"
 arch=("x86_64")
 url="https://weixin.qq.com/"
 license=('custom')
-depends=('p7zip' 'wine' 'wine-mono' 'wine_gecko' 'xorg-xwininfo' 'wqy-microhei' 'lib32-alsa-lib' 'lib32-alsa-plugins' 'lib32-libpulse' 'lib32-openal' 'lib32-mpg123' 'lib32-libldap')
+depends=('p7zip' 'deepin-wine' 'xorg-xwininfo' 'wqy-microhei')
 conflicts=('deepin-wechat')
 install="deepin-wine-wechat.install"
 _mirror="https://mirrors.ustc.edu.cn/deepin"
@@ -19,14 +19,16 @@ source=("$_mirror/pool/non-free/d/deepin.com.wechat/deepin.com.wechat_${deepinwe
   "reg.patch")
 md5sums=('c66a173fe6817afd898e0061d9eaf42e'
   '55704ea3ffe49ca189a0c1ade1e4d350'
-  '88abd550ffce483a3f9627d84e4d5e3a'
+  'f0fa8651097bc5a311d35dfe23707d59'
   '9c9d51ff585ff630473ce827159a8230')
+PKGEXT='.pkg.tar'  # do NOT compress package to save time
 
 build() {
   msg "Extracting DPKG package ..."
   mkdir -p "${srcdir}/dpkgdir"
   tar -xvf data.tar.xz -C "${srcdir}/dpkgdir"
   sed "s/\(Categories.*$\)/\1Network;/" -i "${srcdir}/dpkgdir/usr/share/applications/deepin.com.wechat.desktop"
+  sed "s/\(StartupWMClass\).*$/\1=wechat/" -i "${srcdir}/dpkgdir/usr/share/applications/deepin.com.wechat.desktop"  # for themed icons
   msg "Extracting Deepin Wine WeChat archive ..."
   7z x -aoa "${srcdir}/dpkgdir/opt/deepinwine/apps/Deepin-WeChat/files.7z" -o"${srcdir}/deepinwechatdir"
   msg "Removing original outdated WeChat directory ..."
