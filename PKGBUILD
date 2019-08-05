@@ -27,8 +27,16 @@ build() {
   msg "Extracting DPKG package ..."
   mkdir -p "${srcdir}/dpkgdir"
   tar -xvf data.tar.xz -C "${srcdir}/dpkgdir"
-  sed "s/\(Categories.*$\)/\1Network;/" -i "${srcdir}/dpkgdir/usr/share/applications/deepin.com.wechat.desktop"
-  sed "s/\(StartupWMClass\).*$/\1=wechat/" -i "${srcdir}/dpkgdir/usr/share/applications/deepin.com.wechat.desktop"  # for themed icons
+  desktop_file="${srcdir}/dpkgdir/usr/share/applications/deepin.com.wechat.desktop"
+  sed "s/\(Categories.*$\)/\1Network;/" -i "${desktop_file}"
+  sed "s/\(StartupWMClass\).*$/\1=wechat/" -i "${desktop_file}"  # for themed icons
+  cat <<- 'EOF' >> "${desktop_file}"
+	Actions=Reinstall;
+	
+	[Desktop Action Reinstall]
+	Exec=sh -c "rm -f ~/.deepinwine/Deepin-WeChat/reinstalled; exec /opt/deepinwine/apps/Deepin-WeChat/run.sh"
+	Name=Reinstall WeChat
+EOF
   msg "Extracting Deepin Wine WeChat archive ..."
   7z x -aoa "${srcdir}/dpkgdir/opt/deepinwine/apps/Deepin-WeChat/files.7z" -o"${srcdir}/deepinwechatdir"
   msg "Removing original outdated WeChat directory ..."
