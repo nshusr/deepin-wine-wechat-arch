@@ -26,8 +26,6 @@ Deepin打包的微信(WeChat)容器移植到Archlinux，**本分支依赖`deepin
 <!-- TOC -->
 
 - [安装](#安装)
-    - [从 AUR 安装](#从-aur-安装)
-    - [从 GitHub Release 安装](#从-github-release-安装)
     - [从源码安装](#从源码安装)
 - [常见问题](#常见问题)
 - [感谢](#感谢)
