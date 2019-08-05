@@ -1,4 +1,4 @@
-在Archlinux及衍生发行版上运行微信(WeChat)
+在Archlinux及衍生发行版上运行微信 (WeChat)
 =======
 
 **本分支：采用 `deepin-wine5` 而非原版 `wine`；以下徽章来自母分支，小心混淆**
@@ -21,53 +21,26 @@
   </a>
 </p>
 
-Deepin打包的微信(WeChat)容器移植到Archlinux，**本分支依赖`deepin-wine`**，包含定制的注册表配置，微信安装包替换为官方最新
+Deepin 打包的微信 (WeChat) 容器移植到 Archlinux，**本分支依赖 `deepin-wine`**，包含定制的注册表配置，微信安装包替换为官方最新。
 
 <!-- TOC -->
 
-- [在Archlinux及衍生发行版上运行微信(WeChat)](#在archlinux及衍生发行版上运行微信wechat)
-  - [安装](#安装)
-    - [本地打包安装](#本地打包安装)
-  - [兼容性记录](#兼容性记录)
-  - [切换到 `deepin-wine`](#切换到-deepin-wine)
-    - [自动切换(推荐)](#自动切换推荐)
-    - [手动切换](#手动切换)
-      - [1. 安装 `deepin-wine`](#1-安装-deepin-wine)
-      - [2. 对于非 GNOME 桌面(KDE, XFCE等)](#2-对于非-gnome-桌面kde-xfce等)
-      - [3. 删除已安装的微信目录](#3-删除已安装的微信目录)
-      - [4. 修复 `deepin-wine` 字体渲染发虚](#4-修复-deepin-wine-字体渲染发虚)
-  - [常见问题及解决](#常见问题及解决)
-    - [不能截图](#不能截图)
-    - [高分辨率屏幕支持](#高分辨率屏幕支持)
-    - [使用全局截图快捷键](#使用全局截图快捷键)
-    - [消除阴影边框](#消除阴影边框)
-  - [感谢](#感谢)
-  - [更新日志](#更新日志)
+- [安装](#安装)
+- [兼容性记录](#兼容性记录)
+- [常见问题及解决](#常见问题及解决)
+- [感谢](#感谢)
+- [更新日志](#更新日志)
 
 <!-- /TOC -->
 
 ## 安装
 
-`deepin-wine-wechat`依赖AUR中的`deepin-wine5`，可从AUR或 https://github.com/abcfy2/deepin-wine5-aur 获取。目前`archlinuxcn`仓库仅含`deepin-wine`而暂未加入`deepin-wine5`; 若将来`deepin-wine5`收入`archlinuxcn`, 则可编辑`/etc/pacman.conf`从仓库直接下载：
+`deepin-wine-wechat` 依赖AUR中的 `deepin-wine5`，可从 AUR 或 https://github.com/abcfy2/deepin-wine5-aur 获取。
 
-```cong
-# Add to the end of `pacman.conf`
-
-[archlinuxcn]
-Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
-```
-
-`.md5` 文件用于校验包完整性：
-
-```bash
-md5sum -c *.md5
-```
-
-### 本地打包安装
+### 从源码安装
 
 ```shell
- # 如想使用本分支，请将链接中的 `.../countstarlight/...` 改为 `.../bryango/...`
- git clone https://github.com/countstarlight/deepin-wine-wechat-arch.git
+ git clone https://github.com/bryango/deepin-wine-wechat-arch.git
 
  cd deepin-wine-wechat-arch
  makepkg -si
@@ -87,7 +60,7 @@ md5sum -c *.md5
 
 * 安装完可直接启动
 
-  **注意：登录后请在`设置`里关闭微信的`自动更新`，微信启动时会检查更新并加载自动更新程序，由于默认屏蔽了微信的自动更新程序，会导致找不到更新程序而不能启动**
+  **注意：登录后请在 `设置` 里关闭微信的 `自动更新`，微信启动时会检查更新并加载自动更新程序，由于默认屏蔽了微信的自动更新程序，会导致找不到更新程序而不能启动**
 
 ## 兼容性记录
 
@@ -108,78 +81,9 @@ md5sum -c *.md5
 | 2.7.1.82  |  4.17   |  部分  |                      不能使用中文输入法                      |  2.18_18-2  | 不支持 |                             闪退                             |
 | 2.6.8.65  |  4.16   |  支持  |                                                              |  2.18_18-2  |  支持  |                                                              |
 
-## 切换到 `deepin-wine`
+## 常见问题及解决
 
-原版 `wine` 在 [DDE(Deepin Desktop Environment)](https://www.deepin.org/dde/) 上，有托盘图标无法响应鼠标事件([deepin-wine-tim-arch#21](https://github.com/countstarlight/deepin-wine-tim-arch/issues/21))的问题，截图功能也不可用，可以选择切换到 `deepin-wine`。
-
-**注意：切换前先确保 `deepin-wine` 支持**
-
-根据 [deepin-wine-wechat-arch#15](https://github.com/countstarlight/deepin-wine-wechat-arch/issues/15#issuecomment-515455845)，[deepin-wine-wechat-arch#27](https://github.com/countstarlight/deepin-wine-wechat-arch/issues/27)，由 [@feileb](https://github.com/feileb), [@violetbobo](https://github.com/violetbobo), [@HE7086](https://github.com/HE7086)提供的方法：
-
-### 自动切换(推荐)
-
-```bash
-/opt/deepinwine/apps/Deepin-WeChat/run.sh -d
-```
-
-这会安装需要的依赖，移除已安装的微信目录并回退对注册表文件的修改
-
-切换回 `wine`：
-
-```bash
-rm ~/.deepinwine/Deepin-WeChat/deepin
-```
-
-如果要卸载自动安装的依赖：
-
-```bash
-sudo pacman -Rns deepin-wine xsettingsd lib32-freetype2-infinality-ultimate
-```
-
-### 手动切换
-
-#### 1. 安装 `deepin-wine`
-
-```bash
-yay -S deepin-wine
-```
-
-#### 2. 对于非 GNOME 桌面(KDE, XFCE等)
-
-需要安装 `xsettingsd`：
-
-根据 [deepin-wine-wechat-arch#36](https://github.com/countstarlight/deepin-wine-wechat-arch/issues/36#issuecomment-612001200)，由[Face-Smile](https://github.com/Face-Smile)提供的方法：
-
-```bash
-sudo pacman -S xsettingsd
-```
-
-修改 `/opt/deepinwine/apps/Deepin-WeChat/run.sh`：
-
-```diff
--WINE_CMD="wine"
-+WINE_CMD="deepin-wine"
-
- RunApp()
- {
-+    if [[ -z "$(ps -e | grep -o xsettingsd)" ]]
-+    then
-+        /usr/bin/xsettingsd &
-+    fi
-        if [ -d "$WINEPREFIX" ]; then
-                UpdateApp
-        else
-```
-
-**注意：对 `/opt/deepinwine/apps/Deepin-WeChat/run.sh` 的修改会在 `deepin-wine-wechat` 更新或重装时被覆盖，可以单独拷贝一份作为启动脚本**
-
-#### 3. 删除已安装的微信目录
-
-```bash
-rm -rf ~/.deepinwine/Deepin-WeChat
-```
-
-#### 4. 修复 `deepin-wine` 字体渲染发虚
+### 修复 `deepin-wine` 字体渲染发虚
 
 kde桌面参考：[deepin-wine-wechat-arch#36](https://github.com/countstarlight/deepin-wine-wechat-arch/issues/36)
 
@@ -191,23 +95,11 @@ yay -S lib32-freetype2-infinality-ultimate
 
 **注意：切换到 `deepin-wine` 后，对 `wine` 的修改，如更改dpi，都改为对 `deepin-wine` 的修改**
 
-## 常见问题及解决
-
-### 不能截图
-
-参照[切换到 `deepin-wine`](#切换到-deepin-wine) 解决
-
 ### 高分辨率屏幕支持
 
 在 `winecfg` 的Graphics选项卡中修改dpi，如 修改为`192`
 
-对于 `wine`：
-
-```bash
-env WINEPREFIX="$HOME/.deepinwine/Deepin-WeChat" winecfg
-```
-
-对于 `deepin-wine` ：
+对于 `deepin-wine`：
 
 ```bash
 env WINEPREFIX="$HOME/.deepinwine/Deepin-WeChat" deepin-wine winecfg
@@ -215,13 +107,13 @@ env WINEPREFIX="$HOME/.deepinwine/Deepin-WeChat" deepin-wine winecfg
 
 ### 使用全局截图快捷键
 
-使用全局截图快捷键和解决Gnome上窗口化问题，参见[issue2](https://github.com/countstarlight/deepin-wine-tim-arch/issues/2)
+使用全局截图快捷键和解决Gnome上窗口化问题，参见[issue2](https://github.com/countstarlight/deepin-wine-tim-arch/issues/2).
 
 ### 消除阴影边框
 
-微信窗口不在最上方时，在其他窗口上会显示一个阴影边框
+微信窗口不在最上方时，在其他窗口上会显示一个阴影边框。
 
-参照[切换到 `deepin-wine`](#切换到-deepin-wine) 解决，或者使用[shadow.exe](shadow.exe)，在微信启动时运行，自动消除这个阴影边框
+参照[切换到 `deepin-wine`](#切换到-deepin-wine) 解决，或者使用[shadow.exe](shadow.exe)，在微信启动时运行，自动消除这个阴影边框。
 
 > 根据[“用山寨方法解决wine运行微信残留阴影窗口的问题”](https://blog.kangkang.org/index.php/archives/397)，对原程序稍做修改编译出的 [shadow.exe](shadow.exe)，源码文件为 [shadow.cpp](shadow.cpp)
 
@@ -235,9 +127,9 @@ yay -S mingw-w64-gcc
 i686-w64-mingw32-g++ -municode -m32 -static -s shadow.cpp -o shadow
 ```
 
-对于 `v2.8.0.133-2` 及之前的版本，不自带这个程序，可以自行将[shadow.exe](shadow.exe)放置到 `~/.deepinwine/Deepin-WeChat/drive_c/shadow.exe`
+对于 `v2.8.0.133-2` 及之前的版本，不自带这个程序，可以自行将 [shadow.exe](shadow.exe) 放置到 `~/.deepinwine/Deepin-WeChat/drive_c/shadow.exe`
 
-并参照[run.sh](run.sh)在 `/opt/deepinwine/apps/Deepin-WeChat/run.sh` 中加入如下几行：
+并参照 [run.sh](run.sh) 在 `/opt/deepinwine/apps/Deepin-WeChat/run.sh` 中加入如下几行：
 
 ```diff
 CallApp()
