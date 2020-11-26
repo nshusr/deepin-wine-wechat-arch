@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PACKAGE_NAME="deepin-wine-wechat"
-PACKAGE_SUFFIX=(".pkg.tar.xz" ".pkg.tar.zst")
+PACKAGE_SUFFIX=(".pkg.tar" ".pkg.tar.xz" ".pkg.tar.zst")
 
 GenPatch()
 {
